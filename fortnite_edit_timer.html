@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Fortnite Edit Timer</title>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<style>
+/*		0ba2da*/
+		body{
+			background: #222f3e;
+		}
+		.container{
+			width:300px;
+			height:500px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			margin: auto;
+			font-family: 'segoe ui';
+			color: #c8d6e5;
+		}
+		.Tile{
+			background:#a29482;
+			width:300px;
+			height:300px;
+			border-radius: 25px;
+			cursor: default;
+		}
+		.help{
+			width:100%;
+			height:100px;
+			text-align: center;
+			vertical-align: middle;
+			line-height: 100px;
+			font-size: 23px;
+		}
+		.time{
+			width:100%;
+			height:70px;
+			text-align: center;
+			vertical-align: middle;
+			line-height: 70px;
+			font-size: 23px;
+			font-weight: 500;
+			color: #10ac84;
+		}
+		.best{
+			width:100%;
+			height:30px;
+			text-align: center;
+			vertical-align: middle;
+			line-height: 30px;
+			font-size: 20px;
+			font-weight: 500;
+			color: #c78b18;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="help">Edit with 'E'</div>
+		<div class="Tile">
+		</div>
+		<div class="time">-</div>
+		<div class="best">-</div>
+	</div>
+	<script>
+		var isEditing = false
+		var isTileSelected = false
+		var hit = 0
+		var miss = 0
+		var t0 = 0
+		var best  = 0
+		
+		
+		$('body').keypress((event)=>{
+			event.preventDefault()
+			
+			if(event.which == 101){
+				// Confirm Edit
+				if(isEditing){
+					//TODO: FAKE delay
+					
+					// change the tile color to brown
+					$('.Tile').css({"background":"#a29482", "cursor":"default"})
+					
+					// Register Edit
+					if(isTileSelected){
+						//edit done
+						hit++
+						if(best == 0){
+							best = Math.round(performance.now() - t0)
+						}
+						if(Math.round(performance.now() - t0) < best){
+							best = Math.round(performance.now() - t0)
+						}
+						$('.help').text(hit+" hits | "+miss+" miss")
+						$('.time').text((Math.round(performance.now() - t0)).toString()+ " ms")
+						$('.best').text(best.toString()+ " ms")
+						//console.log(hit+" hits | "+miss+" miss | "+(performance.now() - t0).toString()+ " ms")
+						
+					}else{
+						// edit miss
+						miss++
+						$('.help').text(hit+" hits | "+miss+" miss")
+						//console.log(hit+" hits | "+miss+" miss | "+(performance.now() - t0).toString()+ " ms")
+					}
+					
+					// End Editing
+					isEditing = false
+					isTileSelected = false
+					
+				}
+				// Start Edit
+				else{
+					// start timer
+					if(true){
+						//console.log("start")
+						t0 = performance.now()
+					}
+					
+					// change the tile color to blue
+					$('.Tile').css({"background":"#0ba2da", "cursor":"pointer"})
+
+					// start editing
+					isEditing = true
+				}
+			}
+		})
+		
+		$('.Tile').click(()=>{
+			if(isEditing){
+				if(isTileSelected){
+					// deselect Tile
+					isTileSelected = false
+					
+					// change tile color to blue
+					$('.Tile').css({"background":"#0ba2da"})
+					
+					
+				}
+				else{
+					// select Tile
+					isTileSelected = true
+					
+					// change tile color to gray
+					$('.Tile').css({"background":"#c7c7c7"})
+					
+					
+				}
+				
+			}
+			
+		})
+		
+		// extra select bind -> R
+		$('body').keypress((e)=>{
+			if(e.which == 114){
+			if(isEditing){
+				if(isTileSelected){
+					// deselect Tile
+					isTileSelected = false
+					
+					// change tile color to blue
+					$('.Tile').css({"background":"#0ba2da"})
+					
+					
+				}
+				else{
+					// select Tile
+					isTileSelected = true
+					
+					// change tile color to gray
+					$('.Tile').css({"background":"#c7c7c7"})
+					
+					
+				}
+				
+			}
+			
+		}})
+	</script>
+</body>
+</html>
